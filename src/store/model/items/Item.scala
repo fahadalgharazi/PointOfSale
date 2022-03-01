@@ -14,3 +14,7 @@ class Item {
 
 
 }
+
+class descriptionConstructor(var description:String, var price:Double){
+
+}
