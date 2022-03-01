@@ -5,7 +5,7 @@ import store.model.items.Item
 class SelfCheckout {
 
 
-  var itemMap: Map[String,List] = Map()
+  var itemMap: Map[String,List[String]] = Map()
 //    Map(barcode -> item)
 //  }
 
@@ -16,7 +16,7 @@ class SelfCheckout {
 //    val newItem: Item = new Item("172",)
     //addes a new item object with a bar code key and an item object
 //    object newItem{
-      itemMap = itemMap + (barcode -> item.itemDescription,item.Itemprice)
+      itemMap = itemMap + (barcode -> List(item.itemDescription,(item.Itemprice).toString))
 
     }
   var numbersPressed = ""
@@ -55,8 +55,8 @@ class SelfCheckout {
 //If a customer enters a barcode that has not been added via addItemToStore, an item with a description of "error" and a price of 0.0 should be added to their cart. Example: if the customer presses "1" "5" "enter" and there’s no item with a barcode "15" then their cart should contain an item with description "error" and price "$0.0"
   def itemsInCart(): List[Item] = {
 //    Item(var itemDescription:String, var Itemprice:Double)
-    var addingItem = itemMap.getOrElse(this.numbersPressed, new Item("error",0.0))
-    List()
+    var addingItem = itemMap.getOrElse(this.numbersPressed, List("error","$0.0"))
+    addingItem
 
   }
 
