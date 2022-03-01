@@ -9,8 +9,8 @@ class Task1 extends FunSuite {
   test("your test name") {
 //    var testSelfCheckout: SelfCheckout = new SelfCheckout()
 //
-//    var testItem: Item = new Item("test item", 100.0)
-//
+    var testItem: Item = new Item("test item", 100.0)
+    assert(testItem.description() == "test item")
 //    testSelfCheckout.addItemToStore("123", testItem)
     // TODO
 
