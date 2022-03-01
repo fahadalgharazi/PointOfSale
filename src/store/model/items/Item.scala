@@ -10,6 +10,7 @@ class Item(var itemDescription:String, var Itemprice:Double) {
 
   def setBasePrice(newPrice: Double): Unit ={
     //changes the base price of the item
+    this.Itemprice = newPrice
   }
 
   def price(): Double = {
