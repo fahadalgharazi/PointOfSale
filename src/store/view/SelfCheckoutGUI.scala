@@ -13,7 +13,7 @@ object SelfCheckoutGUI extends JFXApp {
 
   val checkoutModel: SelfCheckout = new SelfCheckout()
   this.checkoutModel.prepareStore()
-
+//git testasdsa
   var scanField: TextField = new TextField {
     editable = false
     style = "-fx-font: 20 ariel;"
