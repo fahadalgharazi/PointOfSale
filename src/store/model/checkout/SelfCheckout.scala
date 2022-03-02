@@ -4,33 +4,27 @@ import store.model.items.Item
 
 class SelfCheckout {
 
+  var itemMap: Map[String,Item] = Map()
+  var barCodePressed:String = ""
+  val invalidItem:Item = new Item("error",0.0)
+  var cart: List[Item] = List()
 
-  var itemMap: Map[String,List[String]] = Map()
-//    Map(barcode -> item)
-//  }
 
   def addItemToStore(barcode: String, item: Item): Unit = {
-//def addItemToStore(barcode: String, item: Item) = {
-
-  // This method adds an item to your store's checkout system. It does not add an item to the customer's cart
-//    val newItem: Item = new Item("172",)
-    //addes a new item object with a bar code key and an item object
-//    object newItem{
-      itemMap = itemMap + (barcode -> List(item.itemDescription,(item.Itemprice).toString))
-
+    itemMap = itemMap + (barcode -> item)
     }
-  var numbersPressed = ""
   def numberPressed(number: Int): Unit = {
-    this.numbersPressed = this.numbersPressed + number.toString()
+    barCodePressed = barCodePressed + number.toString()
   }
 
   def clearPressed(): Unit = {
-  this.numbersPressed = ""
+    barCodePressed = ""
   }
 
   def enterPressed(): Unit = {
-//    this.numbersPressed = ""
-    itemsInCart()
+    var addingItem = itemMap.getOrElse(barCodePressed,invalidItem)
+    barCodePressed = ""
+    cart = cart:+ addingItem
   }
 
   def checkoutPressed(): Unit = {
@@ -50,14 +44,11 @@ class SelfCheckout {
   }
 
   def displayString(): String = {
-    this.numbersPressed
+    barCodePressed
   }
-//If a customer enters a barcode that has not been added via addItemToStore, an item with a description of "error" and a price of 0.0 should be added to their cart. Example: if the customer presses "1" "5" "enter" and there’s no item with a barcode "15" then their cart should contain an item with description "error" and price "$0.0"
-  def itemsInCart(): List[Item] = {
-//    Item(var itemDescription:String, var Itemprice:Double)
-    var addingItem = itemMap.getOrElse(this.numbersPressed, List("error","$0.0"))
-    addingItem
 
+  def itemsInCart(): List[Item] = {
+      cart
   }
 
   def subtotal(): Double = {
@@ -85,8 +76,8 @@ class SelfCheckout {
     // write a similar method in your Test Suite classes.
 
     // Example usage:
-    //val testItem: Item = new Item("test item", 100.0)
-    //this.addItemToStore("472", testItem)
+    val testItem: Item = new Item("test item", 100.0)
+    addItemToStore("472", testItem)
   }
 
 }

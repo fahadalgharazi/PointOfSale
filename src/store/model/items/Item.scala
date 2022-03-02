@@ -14,7 +14,7 @@ class Item(var itemDescription:String, var Itemprice:Double) {
   }
 
   def price(): Double = {
-    Itemprice
+    this.Itemprice
 //    0.0
   }
 
