@@ -82,15 +82,12 @@ class Task1 extends FunSuite {
   test("breaks on invalid barcodes") {
     var testSelfCheckout: SelfCheckout = new SelfCheckout()
     var testItem: Item = new Item("error", 0.0)
-    testSelfCheckout.addItemToStore("472", testItem)
     testSelfCheckout.numberPressed(4)
     testSelfCheckout.numberPressed(7)
     testSelfCheckout.numberPressed(2)
     testSelfCheckout.numberPressed(2)
-
     testSelfCheckout.enterPressed()
-
-    assert(testSelfCheckout.itemsInCart() == List(testItem))
+    assert(testSelfCheckout.itemsInCart().head
   }
 
   test("does not initially display empty") {
