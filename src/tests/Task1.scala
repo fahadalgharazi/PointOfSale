@@ -6,25 +6,11 @@ import store.model.items.Item
 
 class Task1 extends FunSuite {
 
-//  test("test one") {
-//    var testSelfCheckout: SelfCheckout = new SelfCheckout()
-//    var testItem: Item = new Item("test item", 102.0)
-//    assert(testItem.description() == "test item")
-//    testItem.setBasePrice(85.00)
-//    assert(testItem.price() === 85.00)
-//
-////    testSelfCheckout.addItemToStore("123", testItem)
-//    testSelfCheckout.numberPressed(123)
-//    assert(testSelfCheckout.displayString() == "123")
-////    assert(testSelfCheckout.addItemToStore("142",testItem) === Map("142" ->testItem))
-//
-//  }
-
-  test("piazza") {
+  test("cant_change_price & description_not_exact & overcharges_by_one_cent") {
         var testSelfCheckout: SelfCheckout = new SelfCheckout()
-    //
+
         var testItem: Item = new Item("test item", 100.0)
-    //
+
         testSelfCheckout.addItemToStore("123", testItem)
     var descriptions:List[String]=List()
     var prices:List[Double]=List()
@@ -44,7 +30,7 @@ class Task1 extends FunSuite {
 
   }
 
-  test("test") {
+  test("display broken") {
     var testSelfCheckout: SelfCheckout = new SelfCheckout()
     var testItem: Item = new Item("test item", 102.0)
     var testItem2: Item = new Item("test item2", 85.0)
@@ -54,32 +40,98 @@ class Task1 extends FunSuite {
     testSelfCheckout.numberPressed(7)
     testSelfCheckout.numberPressed(2)
     assert(testSelfCheckout.displayString() == "472")
-    testSelfCheckout.enterPressed()
-    assert(testSelfCheckout.itemsInCart().head.itemDescription == testItem.description())
   }
 
-  test("test1") {
+  test("always adds the same item") {
     var testSelfCheckout: SelfCheckout = new SelfCheckout()
     var testItem: Item = new Item("test item", 102.0)
-//    var testItem2: Item = new Item("test item2", 85.0)
+    var testItem2: Item = new Item("test item2", 85.0)
     testSelfCheckout.addItemToStore("472", testItem)
-//    testSelfCheckout.addItemToStore("402", testItem2)
+    testSelfCheckout.addItemToStore("402", testItem2)
     testSelfCheckout.numberPressed(4)
     testSelfCheckout.numberPressed(7)
     testSelfCheckout.numberPressed(2)
-    assert(testSelfCheckout.displayString() == "472")
     testSelfCheckout.enterPressed()
     testSelfCheckout.numberPressed(4)
     testSelfCheckout.numberPressed(7)
     testSelfCheckout.numberPressed(2)
-    assert(testSelfCheckout.displayString() == "472")
     testSelfCheckout.enterPressed()
-    assert(testSelfCheckout.itemsInCart()(0).itemDescription == testItem.description())
-    assert(testSelfCheckout.itemsInCart()(1).itemDescription == testItem.description())
-
+//    val invalidItem:Item = new Item("error",0.0)
+//    var cart: List[Item] = List()
+    assert(testSelfCheckout.itemsInCart() == List(testItem,testItem))
   }
 
+  test("always adds the same item2") {
+    var testSelfCheckout: SelfCheckout = new SelfCheckout()
+    var testItem: Item = new Item("test item", 102.0)
+    var testItem2: Item = new Item("test item2", 85.0)
+    testSelfCheckout.addItemToStore("472", testItem)
+    testSelfCheckout.addItemToStore("402", testItem2)
+    testSelfCheckout.numberPressed(4)
+    testSelfCheckout.numberPressed(7)
+    testSelfCheckout.numberPressed(2)
+    testSelfCheckout.enterPressed()
+    testSelfCheckout.numberPressed(4)
+    testSelfCheckout.numberPressed(0)
+    testSelfCheckout.numberPressed(2)
+    testSelfCheckout.enterPressed()
 
+    assert(testSelfCheckout.itemsInCart() == List(testItem,testItem2))
+  }
+
+  test("breaks on invalid barcodes") {
+    var testSelfCheckout: SelfCheckout = new SelfCheckout()
+    testSelfCheckout.numberPressed(4)
+    testSelfCheckout.numberPressed(7)
+    testSelfCheckout.numberPressed(2)
+    testSelfCheckout.numberPressed(2)
+    testSelfCheckout.enterPressed()
+    assert(testSelfCheckout.itemsInCart().head.description() == "error")
+    assert(Math.abs(testSelfCheckout.itemsInCart().head.price() - 0.0)< 0.01)
+  }
+
+  test("does not initially display empty") {
+    var testSelfCheckout: SelfCheckout = new SelfCheckout()
+    assert(testSelfCheckout.displayString() == "")
+  }
+
+  test("clear_doesnt_clear"){
+    var testSelfCheckout: SelfCheckout = new SelfCheckout()
+    var testItem: Item = new Item("test item", 102.0)
+    var testItem2: Item = new Item("test item2", 85.0)
+    testSelfCheckout.addItemToStore("472", testItem)
+    testSelfCheckout.addItemToStore("402", testItem2)
+    testSelfCheckout.numberPressed(4)
+    testSelfCheckout.numberPressed(7)
+    testSelfCheckout.numberPressed(2)
+    testSelfCheckout.clearPressed()
+    assert(testSelfCheckout.displayString() == "")
+  }
+
+  test("does_not_accept_leading_zeros"){
+    var testSelfCheckout: SelfCheckout = new SelfCheckout()
+    var testItem: Item = new Item("test item", 102.0)
+    testSelfCheckout.addItemToStore("072", testItem)
+    testSelfCheckout.numberPressed(0)
+    testSelfCheckout.numberPressed(7)
+    testSelfCheckout.numberPressed(2)
+    testSelfCheckout.enterPressed()
+    assert(testSelfCheckout.itemsInCart() == List(testItem))
+  }
+
+  //  test("test one") {
+  //    var testSelfCheckout: SelfCheckout = new SelfCheckout()
+  //    var testItem: Item = new Item("test item", 102.0)
+  //    assert(testItem.description() == "test item")
+  //    testItem.setBasePrice(85.00)
+  //    assert(testItem.price() === 85.00)
+  //
+  ////    testSelfCheckout.addItemToStore("123", testItem)
+  //    testSelfCheckout.numberPressed(123)
+  //    assert(testSelfCheckout.displayString() == "123")
+  ////    assert(testSelfCheckout.addItemToStore("142",testItem) === Map("142" ->testItem))
+  //
+  //  }
 
 
 
